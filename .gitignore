@@ -1,7 +1,20 @@
+# Python
 venv/
 __pycache__/
 *.pyc
+
+# Data (DVC handles this)
 data/raw/*
-!data/raw/*.dvc
+data/features/*
+!data/**/*.dvc
+
+# MLflow
 mlruns/
-.env
+
+# Logs / DB
+*.log
+*.db
+
+# OS
+.DS_Store
+Thumbs.db
