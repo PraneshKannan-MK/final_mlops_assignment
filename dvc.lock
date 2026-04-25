@@ -1,0 +1,46 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python scripts/prepare_data.py
+    deps:
+    - path: data/raw/retail_dataset.csv
+      hash: md5
+      md5: 43161d2044f30cb4bc7e4e8f749f9aa9
+      size: 6346402
+    - path: scripts/prepare_data.py
+      hash: md5
+      md5: 8b5e16cb4163ebcc314f57e7db58bf79
+      size: 1671
+    outs:
+    - path: data/raw/sales.csv
+      hash: md5
+      md5: 12c5ccd3c8b1349a0711a7179260958c
+      size: 4749945
+  train:
+    cmd: python -m src.pipeline.train_pipeline
+    deps:
+    - path: data/raw/sales.csv
+      hash: md5
+      md5: 12c5ccd3c8b1349a0711a7179260958c
+      size: 4749945
+    - path: src/data/feature_engineering.py
+      hash: md5
+      md5: 563fc0ac38437f6bc68b5673b17032e3
+      size: 6075
+    - path: src/data/preprocessing.py
+      hash: md5
+      md5: a73e40988aa7f73d62a90b5a3e45ce30
+      size: 3106
+    - path: src/models/trainer.py
+      hash: md5
+      md5: c4991f3a39219f4ae65de9a98c718333
+      size: 2243
+    - path: src/pipeline/train_pipeline.py
+      hash: md5
+      md5: a3704ed463e00b9b918311dbe138bad9
+      size: 1315
+    outs:
+    - path: data/features/sales_features.csv
+      hash: md5
+      md5: 758e36df2135aab07c40fb3fdbe4a252
+      size: 31268693
