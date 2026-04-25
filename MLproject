@@ -1,0 +1,5 @@
+name: demand_forecasting
+
+entry_points:
+  train:
+    command: "python -m src.pipeline.train_pipeline"

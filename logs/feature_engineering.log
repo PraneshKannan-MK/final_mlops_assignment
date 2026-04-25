@@ -1,0 +1,2 @@
+2026-04-25 16:44:08.023 | INFO     | src.data.feature_engineering:run:24 - Starting feature engineering
+2026-04-25 16:44:08.168 | INFO     | src.data.feature_engineering:run:34 - Feature engineering complete. Total columns: 47

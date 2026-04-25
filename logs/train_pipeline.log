@@ -1,0 +1,120 @@
+2026-04-25 16:46:42.017 | INFO     | __main__:run:21 - 🚀 Starting training pipeline
+2026-04-25 16:46:42.082 | INFO     | __main__:run:25 - Loaded data: (76000, 12)
+2026-04-25 16:46:42.083 | INFO     | src.data.preprocessing:run:29 - Starting preprocessing pipeline
+2026-04-25 16:46:42.144 | DEBUG    | src.data.preprocessing:_cast_types:44 - Type casting complete
+2026-04-25 16:46:42.181 | INFO     | src.data.preprocessing:_handle_missing:61 - Missing value handling: 0 rows dropped for null dates
+2026-04-25 16:46:42.193 | INFO     | src.data.preprocessing:_remove_outliers:73 - Outlier capping: sales_qty clipped to [0.00, 226.00]
+2026-04-25 16:46:42.212 | INFO     | src.data.preprocessing:run:35 - Preprocessing complete. Rows remaining: 76,000
+2026-04-25 16:46:42.212 | INFO     | __main__:run:30 - After preprocessing: (76000, 12)
+2026-04-25 16:46:42.212 | INFO     | src.data.feature_engineering:run:24 - Starting feature engineering
+2026-04-25 16:46:42.350 | INFO     | src.data.feature_engineering:run:34 - Feature engineering complete. Total columns: 47
+2026-04-25 16:46:42.351 | INFO     | __main__:run:35 - After feature engineering: (76000, 47)
+2026-04-25 16:46:43.384 | INFO     | src.models.trainer:run:29 - Training on 73,200 samples, 36 features
+2026-04-25 16:47:32.282 | INFO     | __main__:run:21 - 🚀 Starting training pipeline
+2026-04-25 16:47:32.343 | INFO     | __main__:run:25 - Loaded data: (76000, 12)
+2026-04-25 16:47:32.343 | INFO     | src.data.preprocessing:run:29 - Starting preprocessing pipeline
+2026-04-25 16:47:32.402 | DEBUG    | src.data.preprocessing:_cast_types:44 - Type casting complete
+2026-04-25 16:47:32.433 | INFO     | src.data.preprocessing:_handle_missing:61 - Missing value handling: 0 rows dropped for null dates
+2026-04-25 16:47:32.445 | INFO     | src.data.preprocessing:_remove_outliers:73 - Outlier capping: sales_qty clipped to [0.00, 226.00]
+2026-04-25 16:47:32.462 | INFO     | src.data.preprocessing:run:35 - Preprocessing complete. Rows remaining: 76,000
+2026-04-25 16:47:32.462 | INFO     | __main__:run:30 - After preprocessing: (76000, 12)
+2026-04-25 16:47:32.463 | INFO     | src.data.feature_engineering:run:24 - Starting feature engineering
+2026-04-25 16:47:32.599 | INFO     | src.data.feature_engineering:run:34 - Feature engineering complete. Total columns: 47
+2026-04-25 16:47:32.600 | INFO     | __main__:run:35 - After feature engineering: (76000, 47)
+2026-04-25 16:47:33.609 | INFO     | src.models.trainer:run:29 - Training on 73,200 samples, 36 features
+2026-04-25 16:47:33.762 | INFO     | src.models.trainer:run:50 - Training model: xgboost
+2026-04-25 16:47:33.762 | INFO     | src.models.xgboost_model:train:42 - Training XGBoost with 73,200 samples
+2026-04-25 16:49:30.015 | INFO     | __main__:run:21 - 🚀 Starting training pipeline
+2026-04-25 16:49:30.075 | INFO     | __main__:run:25 - Loaded data: (76000, 12)
+2026-04-25 16:49:30.076 | INFO     | src.data.preprocessing:run:29 - Starting preprocessing pipeline
+2026-04-25 16:49:30.134 | DEBUG    | src.data.preprocessing:_cast_types:44 - Type casting complete
+2026-04-25 16:49:30.164 | INFO     | src.data.preprocessing:_handle_missing:61 - Missing value handling: 0 rows dropped for null dates
+2026-04-25 16:49:30.178 | INFO     | src.data.preprocessing:_remove_outliers:73 - Outlier capping: sales_qty clipped to [0.00, 226.00]
+2026-04-25 16:49:30.192 | INFO     | src.data.preprocessing:run:35 - Preprocessing complete. Rows remaining: 76,000
+2026-04-25 16:49:30.192 | INFO     | __main__:run:30 - After preprocessing: (76000, 12)
+2026-04-25 16:49:30.193 | INFO     | src.data.feature_engineering:run:24 - Starting feature engineering
+2026-04-25 16:49:30.331 | INFO     | src.data.feature_engineering:run:37 - Feature engineering complete. Total columns: 47
+2026-04-25 16:49:30.332 | INFO     | __main__:run:35 - After feature engineering: (76000, 47)
+2026-04-25 16:49:31.480 | INFO     | src.models.trainer:run:29 - Training on 73,200 samples, 36 features
+2026-04-25 16:49:31.635 | INFO     | src.models.trainer:run:50 - Training model: xgboost
+2026-04-25 16:49:31.635 | INFO     | src.models.xgboost_model:train:42 - Training XGBoost with 73,200 samples
+2026-04-25 16:49:42.861 | INFO     | src.models.xgboost_model:train:52 - Top 5 features: [('price', 5017.0), ('price_rolling_mean_7', 4418.0), ('price_pct_change', 3393.0), ('discount_effect', 2548.0), ('sales_lag_1', 2206.0)]
+2026-04-25 16:49:42.982 | INFO     | src.models.base_model:evaluate:56 - Eval — MAE: 7.8234, RMSE: 9.9716, MAPE: 9.88% | Total Cost: 27.3769
+2026-04-25 16:49:42.988 | INFO     | src.models.trainer:run:50 - Training model: prophet
+2026-04-25 16:49:42.990 | INFO     | src.models.prophet_model:train:45 - Training Prophet on 73200 samples
+2026-04-25 16:52:21.851 | INFO     | __main__:run:21 - 🚀 Starting training pipeline
+2026-04-25 16:52:21.913 | INFO     | __main__:run:25 - Loaded data: (76000, 12)
+2026-04-25 16:52:21.913 | INFO     | src.data.preprocessing:run:29 - Starting preprocessing pipeline
+2026-04-25 16:52:21.921 | DEBUG    | src.data.preprocessing:_cast_types:44 - Type casting complete
+2026-04-25 16:52:21.956 | INFO     | src.data.preprocessing:_handle_missing:61 - Missing value handling: 0 rows dropped for null dates
+2026-04-25 16:52:21.968 | INFO     | src.data.preprocessing:_remove_outliers:73 - Outlier capping: sales_qty clipped to [0.00, 226.00]
+2026-04-25 16:52:21.982 | INFO     | src.data.preprocessing:run:35 - Preprocessing complete. Rows remaining: 76,000
+2026-04-25 16:52:21.982 | INFO     | __main__:run:30 - After preprocessing: (76000, 12)
+2026-04-25 16:52:21.983 | INFO     | src.data.feature_engineering:run:24 - Starting feature engineering
+2026-04-25 16:52:22.122 | INFO     | src.data.feature_engineering:run:37 - Feature engineering complete. Total columns: 47
+2026-04-25 16:52:22.123 | INFO     | __main__:run:35 - After feature engineering: (76000, 47)
+2026-04-25 16:52:23.137 | INFO     | src.models.trainer:run:28 - Training on 73,200 samples, 36 features
+2026-04-25 16:52:23.253 | INFO     | src.models.trainer:run:44 - Training model: xgboost
+2026-04-25 16:52:23.253 | INFO     | src.models.xgboost_model:train:42 - Training XGBoost with 73,200 samples
+2026-04-25 16:52:27.571 | INFO     | src.models.xgboost_model:train:52 - Top 5 features: [('price', 5017.0), ('price_rolling_mean_7', 4418.0), ('price_pct_change', 3393.0), ('discount_effect', 2548.0), ('sales_lag_1', 2206.0)]
+2026-04-25 16:52:27.679 | INFO     | src.models.base_model:evaluate:56 - Eval — MAE: 7.8234, RMSE: 9.9716, MAPE: 9.88% | Total Cost: 27.3769
+2026-04-25 16:52:27.686 | INFO     | src.models.trainer:run:53 - Model RMSE: 9.9716
+2026-04-25 16:52:30.956 | INFO     | src.models.trainer:run:67 - Training complete. Run ID: 4562053106544b3fae287902491e3dd4
+2026-04-25 16:52:30.964 | INFO     | __main__:run:44 - ✅ Training completed. MLflow run_id=4562053106544b3fae287902491e3dd4
+2026-04-25 19:06:13.441 | INFO     | __main__:run:21 - 🚀 Starting training pipeline
+2026-04-25 19:06:13.551 | INFO     | __main__:run:25 - Loaded data: (76000, 12)
+2026-04-25 19:06:13.551 | INFO     | src.data.preprocessing:run:29 - Starting preprocessing pipeline
+2026-04-25 19:06:13.572 | DEBUG    | src.data.preprocessing:_cast_types:44 - Type casting complete
+2026-04-25 19:06:13.610 | INFO     | src.data.preprocessing:_handle_missing:61 - Missing value handling: 0 rows dropped for null dates
+2026-04-25 19:06:13.623 | INFO     | src.data.preprocessing:_remove_outliers:73 - Outlier capping: sales_qty clipped to [0.00, 226.00]
+2026-04-25 19:06:13.639 | INFO     | src.data.preprocessing:run:35 - Preprocessing complete. Rows remaining: 76,000
+2026-04-25 19:06:13.640 | INFO     | __main__:run:30 - After preprocessing: (76000, 12)
+2026-04-25 19:06:13.640 | INFO     | src.data.feature_engineering:run:24 - Starting feature engineering
+2026-04-25 19:06:13.803 | INFO     | src.data.feature_engineering:run:37 - Feature engineering complete. Total columns: 47
+2026-04-25 19:06:13.803 | INFO     | __main__:run:35 - After feature engineering: (76000, 47)
+2026-04-25 19:06:14.804 | INFO     | src.models.trainer:run:31 - Training on 73,200 samples, 36 features
+2026-04-25 19:06:14.941 | INFO     | src.models.trainer:run:42 - Training model: xgboost
+2026-04-25 19:06:14.941 | INFO     | src.models.xgboost_model:train:42 - Training XGBoost with 73,200 samples
+2026-04-25 19:06:17.790 | INFO     | src.models.xgboost_model:train:52 - Top 5 features: [('price', 5017.0), ('price_rolling_mean_7', 4418.0), ('price_pct_change', 3393.0), ('discount_effect', 2548.0), ('sales_lag_1', 2206.0)]
+2026-04-25 19:06:17.878 | INFO     | src.models.base_model:evaluate:56 - Eval — MAE: 7.8234, RMSE: 9.9716, MAPE: 9.88% | Total Cost: 27.3769
+2026-04-25 19:06:17.889 | INFO     | src.models.trainer:run:50 - Model RMSE: 9.9716
+2026-04-25 19:27:36.114 | INFO     | __main__:run:21 - 🚀 Starting training pipeline
+2026-04-25 19:27:36.194 | INFO     | __main__:run:25 - Loaded data: (76000, 12)
+2026-04-25 19:27:36.194 | INFO     | src.data.preprocessing:run:29 - Starting preprocessing pipeline
+2026-04-25 19:27:36.209 | DEBUG    | src.data.preprocessing:_cast_types:44 - Type casting complete
+2026-04-25 19:27:36.249 | INFO     | src.data.preprocessing:_handle_missing:61 - Missing value handling: 0 rows dropped for null dates
+2026-04-25 19:27:36.261 | INFO     | src.data.preprocessing:_remove_outliers:73 - Outlier capping: sales_qty clipped to [0.00, 226.00]
+2026-04-25 19:27:36.275 | INFO     | src.data.preprocessing:run:35 - Preprocessing complete. Rows remaining: 76,000
+2026-04-25 19:27:36.276 | INFO     | __main__:run:30 - After preprocessing: (76000, 12)
+2026-04-25 19:27:36.276 | INFO     | src.data.feature_engineering:run:24 - Starting feature engineering
+2026-04-25 19:27:36.426 | INFO     | src.data.feature_engineering:run:37 - Feature engineering complete. Total columns: 47
+2026-04-25 19:27:36.427 | INFO     | __main__:run:35 - After feature engineering: (76000, 47)
+2026-04-25 19:27:37.452 | INFO     | src.models.trainer:run:31 - Training on 73,200 samples, 36 features
+2026-04-25 19:27:37.614 | INFO     | src.models.trainer:run:42 - Training model: xgboost
+2026-04-25 19:27:37.614 | INFO     | src.models.xgboost_model:train:42 - Training XGBoost with 73,200 samples
+2026-04-25 19:27:45.971 | INFO     | src.models.xgboost_model:train:52 - Top 5 features: [('price', 5017.0), ('price_rolling_mean_7', 4418.0), ('price_pct_change', 3393.0), ('discount_effect', 2548.0), ('sales_lag_1', 2206.0)]
+2026-04-25 19:27:46.076 | INFO     | src.models.base_model:evaluate:56 - Eval — MAE: 7.8234, RMSE: 9.9716, MAPE: 9.88% | Total Cost: 27.3769
+2026-04-25 19:27:46.087 | INFO     | src.models.trainer:run:50 - Model RMSE: 9.9716
+2026-04-25 19:27:49.371 | INFO     | src.models.trainer:run:64 - Training complete. Run ID: 0e0bf959784d40be86631607ba263919
+2026-04-25 19:27:49.371 | INFO     | src.models.trainer:run:65 - Model registered as: demand_forecaster
+2026-04-25 19:27:49.409 | INFO     | __main__:run:44 - ✅ Training completed. MLflow run_id=0e0bf959784d40be86631607ba263919
+2026-04-25 16:06:58.438 | INFO     | __main__:run:21 - 🚀 Starting training pipeline
+2026-04-25 16:06:58.689 | INFO     | __main__:run:25 - Loaded data: (76000, 12)
+2026-04-25 16:06:58.690 | INFO     | src.data.preprocessing:run:29 - Starting preprocessing pipeline
+2026-04-25 16:06:58.706 | DEBUG    | src.data.preprocessing:_cast_types:44 - Type casting complete
+2026-04-25 16:06:58.816 | INFO     | src.data.preprocessing:_handle_missing:61 - Missing value handling: 0 rows dropped for null dates
+2026-04-25 16:06:58.846 | INFO     | src.data.preprocessing:_remove_outliers:73 - Outlier capping: sales_qty clipped to [0.00, 226.00]
+2026-04-25 16:06:58.865 | INFO     | src.data.preprocessing:run:35 - Preprocessing complete. Rows remaining: 76,000
+2026-04-25 16:06:58.865 | INFO     | __main__:run:30 - After preprocessing: (76000, 12)
+2026-04-25 16:06:58.866 | INFO     | src.data.feature_engineering:run:24 - Starting feature engineering
+2026-04-25 16:06:59.115 | INFO     | src.data.feature_engineering:run:37 - Feature engineering complete. Total columns: 47
+2026-04-25 16:06:59.116 | INFO     | __main__:run:35 - After feature engineering: (76000, 47)
+2026-04-25 16:07:00.369 | INFO     | src.models.trainer:run:31 - Training on 73,200 samples, 36 features
+2026-04-25 16:07:00.536 | INFO     | src.models.trainer:run:42 - Training model: xgboost
+2026-04-25 16:07:00.537 | INFO     | src.models.xgboost_model:train:42 - Training XGBoost with 73,200 samples
+2026-04-25 16:07:23.081 | INFO     | src.models.xgboost_model:train:52 - Top 5 features: [('price', 5037.0), ('price_rolling_mean_7', 4696.0), ('price_pct_change', 3232.0), ('discount_effect', 2626.0), ('sales_lag_1', 2045.0)]
+2026-04-25 16:07:23.170 | INFO     | src.models.base_model:evaluate:56 - Eval — MAE: 7.7759, RMSE: 9.9074, MAPE: 9.80% | Total Cost: 27.2090
+2026-04-25 16:07:23.180 | INFO     | src.models.trainer:run:50 - Model RMSE: 9.9074
+2026-04-25 16:07:25.674 | INFO     | src.models.trainer:run:64 - Training complete. Run ID: e2d8ba75cc4344bd8b2b0a6c62fed678
+2026-04-25 16:07:25.674 | INFO     | src.models.trainer:run:65 - Model registered as: demand_forecaster
+2026-04-25 16:07:25.689 | INFO     | __main__:run:44 - ✅ Training completed. MLflow run_id=e2d8ba75cc4344bd8b2b0a6c62fed678
