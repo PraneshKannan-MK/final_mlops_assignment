@@ -1,7 +1,7 @@
 venv/
 __pycache__/
 *.pyc
-data/raw/
-data/features/
+data/raw/*
+!data/raw/*.dvc
 mlruns/
 .env
