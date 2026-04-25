@@ -3,7 +3,7 @@ venv/
 __pycache__/
 *.pyc
 
-# Data (DVC handles this)
+# Data (DVC handles it)
 data/raw/*
 data/features/*
 !data/**/*.dvc
@@ -11,10 +11,11 @@ data/features/*
 # MLflow
 mlruns/
 
-# Logs / DB
+# Logs
+logs/
 *.log
-*.db
 
-# OS
+# DB / system
+*.db
 .DS_Store
 Thumbs.db
