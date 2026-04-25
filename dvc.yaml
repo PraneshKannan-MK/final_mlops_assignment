@@ -1,0 +1,19 @@
+stages:
+  prepare:
+    cmd: python scripts/prepare_data.py
+    deps:
+      - scripts/prepare_data.py
+      - data/raw/retail_dataset.csv
+    outs:
+      - data/raw/sales.csv
+
+  train:
+    cmd: python -m src.pipeline.train_pipeline
+    deps:
+      - src/pipeline/train_pipeline.py
+      - src/data/preprocessing.py
+      - src/data/feature_engineering.py
+      - src/models/trainer.py
+      - data/raw/sales.csv
+    outs:
+      - data/features/sales_features.csv
