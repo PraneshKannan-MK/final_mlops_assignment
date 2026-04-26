@@ -68,7 +68,7 @@ class BaseModel(ABC):
         overstock = np.maximum(y_pred - y_true, 0)
         stockout = np.maximum(y_true - y_pred, 0)
 
-        # You can tune these weights later (important for viva)
+        # we can tune these weights later
         overstock_cost = np.mean(overstock * 2)
         stockout_cost = np.mean(stockout * 5)
 
