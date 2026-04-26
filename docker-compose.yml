@@ -1,5 +1,14 @@
 services:
 
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.15.1
+    container_name: mlflow
+    command: mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri sqlite:///mlflow/mlflow.db --default-artifact-root /mlflow/artifacts
+    ports:
+      - "5000:5000"
+    volumes:
+      - mlflow_data:/mlflow
+
   backend:
     build:
       context: .
@@ -7,19 +16,25 @@ services:
     container_name: backend
     ports:
       - "8000:8000"
+      - "8001:8001"
     volumes:
       - .:/app
     environment:
       - MLFLOW_TRACKING_URI=http://mlflow:5000
+      - MODEL_NAME=demand_forecaster
+      - MODEL_STAGE=Production
     depends_on:
       - mlflow
 
-  mlflow:
-    image: ghcr.io/mlflow/mlflow:v3.1.1
-    container_name: mlflow
-    command: mlflow server --host 0.0.0.0 --port 5000
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    container_name: frontend
     ports:
-      - "5000:5000"
+      - "3001:3001"
+    depends_on:
+      - backend
 
   prometheus:
     image: prom/prometheus:latest
@@ -39,6 +54,10 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./monitoring/grafana:/var/lib/grafana
+      - grafana_data:/var/lib/grafana
     depends_on:
       - prometheus
+
+volumes:
+  mlflow_data:
+  grafana_data:
