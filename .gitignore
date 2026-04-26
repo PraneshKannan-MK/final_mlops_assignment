@@ -1,21 +1,16 @@
-# Python
 venv/
 __pycache__/
 *.pyc
-
-# Data (DVC handles it)
-data/raw/*
-data/features/*
-!data/**/*.dvc
-
-# MLflow
-mlruns/
-
-# Logs
+.env
+node_modules/
+frontend/node_modules/
+frontend/build/
 logs/
 *.log
-
-# DB / system
-*.db
-.DS_Store
-Thumbs.db
+mlruns/
+data/raw/*
+data/processed/*
+data/features/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/features/.gitkeep
