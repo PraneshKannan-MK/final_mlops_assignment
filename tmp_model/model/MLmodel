@@ -1,0 +1,58 @@
+artifact_path: /mlflow/artifacts/1/models/m-6d96f516d2a649458fbadca986222ecd/artifacts
+flavors:
+  python_function:
+    data: model.ubj
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.xgboost
+    python_version: 3.11.15
+  xgboost:
+    code: null
+    data: model.ubj
+    model_class: xgboost.sklearn.XGBRegressor
+    model_format: ubj
+    xgb_version: 2.1.1
+is_signature_from_type_hint: false
+mlflow_version: 3.11.1
+model_id: m-6d96f516d2a649458fbadca986222ecd
+model_size_bytes: 2403359
+model_uuid: m-6d96f516d2a649458fbadca986222ecd
+prompts: null
+run_id: a79063e0b4704f64ab076683341148c6
+signature:
+  inputs: '[{"type": "double", "name": "price", "required": true}, {"type": "long",
+    "name": "discount", "required": true}, {"type": "long", "name": "inventory_level",
+    "required": true}, {"type": "double", "name": "competitor_price", "required":
+    true}, {"type": "long", "name": "promotion", "required": true}, {"type": "long",
+    "name": "epidemic", "required": true}, {"type": "integer", "name": "year", "required":
+    true}, {"type": "integer", "name": "month", "required": true}, {"type": "integer",
+    "name": "day_of_week", "required": true}, {"type": "integer", "name": "day_of_year",
+    "required": true}, {"type": "long", "name": "week_of_year", "required": true},
+    {"type": "integer", "name": "quarter", "required": true}, {"type": "long", "name":
+    "is_weekend", "required": true}, {"type": "long", "name": "is_month_start", "required":
+    true}, {"type": "long", "name": "is_month_end", "required": true}, {"type": "double",
+    "name": "price_lag_7", "required": true}, {"type": "double", "name": "price_pct_change",
+    "required": true}, {"type": "double", "name": "price_rolling_mean_7", "required":
+    true}, {"type": "double", "name": "sales_lag_1", "required": true}, {"type": "double",
+    "name": "sales_lag_7", "required": true}, {"type": "double", "name": "sales_lag_14",
+    "required": true}, {"type": "double", "name": "sales_lag_28", "required": true},
+    {"type": "double", "name": "sales_rolling_mean_7", "required": true}, {"type":
+    "double", "name": "sales_rolling_std_7", "required": true}, {"type": "double",
+    "name": "sales_rolling_mean_14", "required": true}, {"type": "double", "name":
+    "sales_rolling_std_14", "required": true}, {"type": "double", "name": "sales_rolling_mean_28",
+    "required": true}, {"type": "double", "name": "sales_rolling_std_28", "required":
+    true}, {"type": "double", "name": "sin_1", "required": true}, {"type": "double",
+    "name": "cos_1", "required": true}, {"type": "double", "name": "sin_2", "required":
+    true}, {"type": "double", "name": "cos_2", "required": true}, {"type": "double",
+    "name": "sin_3", "required": true}, {"type": "double", "name": "cos_3", "required":
+    true}, {"type": "double", "name": "discount_effect", "required": true}, {"type":
+    "long", "name": "low_stock_flag", "required": true}, {"type": "double", "name":
+    "price_diff", "required": true}, {"type": "long", "name": "is_promo", "required":
+    true}, {"type": "long", "name": "is_rainy", "required": true}, {"type": "integer",
+    "name": "seasonality_index", "required": true}, {"type": "long", "name": "epidemic_flag",
+    "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "float32", "shape": [-1]}}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2026-04-28 05:55:52.938586'

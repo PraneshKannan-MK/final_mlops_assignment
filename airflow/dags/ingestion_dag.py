@@ -1,93 +1,91 @@
 """
-Airflow DAG: demand_forecast_ingestion
-Daily pipeline: ingest → preprocess → feature engineer → DVC push
+Airflow DAG: demand_forecast_pipeline
 """
 
 from datetime import datetime, timedelta
+import subprocess
 import json
 import os
+
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 
 default_args = {
-    "owner": "mlops-team",
-    "depends_on_past": False,
-    "email_on_failure": True,
-    "email_on_retry": False,
+    "owner": "mlops",
     "retries": 2,
     "retry_delay": timedelta(minutes=5),
 }
 
-STATUS_FILE = "data/processed/pipeline_status.json"
+STATUS_FILE = "/app/data/processed/pipeline_status.json"
 
 
-def _write_status(pipeline_name: str, status: str, rows: int = None):
-    existing = {}
+def _write_status(stage, status):
+    data = {}
     if os.path.exists(STATUS_FILE):
         with open(STATUS_FILE) as f:
-            existing = json.load(f)
-    existing[pipeline_name] = {
+            data = json.load(f)
+
+    data[stage] = {
         "status": status,
-        "run_time": datetime.utcnow().isoformat(),
-        "rows_processed": rows,
+        "time": datetime.utcnow().isoformat()
     }
+
     os.makedirs(os.path.dirname(STATUS_FILE), exist_ok=True)
+
     with open(STATUS_FILE, "w") as f:
-        json.dump(existing, f, indent=2)
+        json.dump(data, f, indent=2)
 
 
-def ingest_data(**kwargs):
-    from src.data.ingestion import DataIngestion
-    ingestion = DataIngestion()
-    df = ingestion.load()
-    stats = ingestion.get_baseline_statistics(df)
-    os.makedirs("data/processed", exist_ok=True)
-    with open("data/processed/baseline_stats.json", "w") as f:
-        json.dump(stats, f, indent=2)
-    df.to_csv("data/processed/raw_validated.csv", index=False)
-    _write_status("data_ingestion", "success", len(df))
-    kwargs["ti"].xcom_push(key="row_count", value=len(df))
+def run_cmd(cmd, stage):
+    try:
+        env = os.environ.copy()
+        env["PYTHONPATH"] = "/app"   # 🔥 CRITICAL FIX
+
+        subprocess.run(
+            cmd,
+            check=True,
+            cwd="/app",
+            env=env
+        )
+        _write_status(stage, "success")
+
+    except Exception as e:
+        _write_status(stage, "failed")
+        raise
 
 
-def preprocess_data(**kwargs):
-    import pandas as pd
-    from src.data.preprocessing import DataPreprocessor
-    df = pd.read_csv("data/processed/raw_validated.csv", parse_dates=["date"])
-    preprocessor = DataPreprocessor()
-    df_clean = preprocessor.run(df)
-    preprocessor.save(df_clean)
-    _write_status("preprocessing", "success", len(df_clean))
+def ingest():
+    run_cmd(["python", "-m", "src.data.ingestion"], "ingestion")
 
 
-def engineer_features(**kwargs):
-    import pandas as pd
-    from src.data.feature_engineering import FeatureEngineer
-    df = pd.read_csv("data/processed/sales_clean.csv", parse_dates=["date"])
-    engineer = FeatureEngineer()
-    df_features = engineer.run(df)
-    engineer.save(df_features)
-    _write_status("feature_engineering", "success", len(df_features))
+def preprocess():
+    run_cmd(["python", "-m", "src.data.preprocessing"], "preprocessing")
 
 
-def dvc_push(**kwargs):
-    import subprocess
-    result = subprocess.run(["dvc", "push"], capture_output=True, text=True)
-    if result.returncode != 0:
-        raise RuntimeError(f"DVC push failed: {result.stderr}")
-    _write_status("dvc_push", "success")
+def feature_engineer():
+    run_cmd(["python", "-m", "src.data.feature_engineering"], "feature_engineering")
+
+
+def train():
+    run_cmd(["python", "-m", "src.pipeline.train_pipeline"], "training")
+
+
+def dvc_push():
+    run_cmd(["dvc", "push"], "dvc")
 
 
 with DAG(
-    dag_id="demand_forecast_ingestion",
+    dag_id="demand_forecast_pipeline",
     default_args=default_args,
-    description="Daily data ingestion and feature engineering",
-    schedule_interval="@daily",
     start_date=datetime(2024, 1, 1),
+    schedule="@daily",   # 🔥 updated (no deprecation warning)
     catchup=False,
-    tags=["demand-forecasting", "mlops"],
 ) as dag:
-    t1 = PythonOperator(task_id="ingest_data", python_callable=ingest_data)
-    t2 = PythonOperator(task_id="preprocess_data", python_callable=preprocess_data)
-    t3 = PythonOperator(task_id="engineer_features", python_callable=engineer_features)
-    t4 = PythonOperator(task_id="dvc_push", python_callable=dvc_push)
-    t1 >> t2 >> t3 >> t4
+
+    t1 = PythonOperator(task_id="ingest", python_callable=ingest)
+    t2 = PythonOperator(task_id="preprocess", python_callable=preprocess)
+    t3 = PythonOperator(task_id="feature_engineer", python_callable=feature_engineer)
+    t4 = PythonOperator(task_id="train", python_callable=train)
+    t5 = PythonOperator(task_id="dvc_push", python_callable=dvc_push)
+
+    t1 >> t2 >> t3 >> t4 >> t5
