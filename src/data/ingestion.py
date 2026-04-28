@@ -1,68 +1,43 @@
-"""
-Data ingestion module.
-Loads raw CSV sales data and performs schema validation.
-"""
-
+import os
 import pandas as pd
-from pathlib import Path
-from src.utils.logger import get_logger
-from src.utils.config import config
+from loguru import logger
 
-log = get_logger("ingestion")
-
-REQUIRED_COLUMNS = {"date", "product_id", "store_id", "sales_qty", "price"}
+RAW_DATA_PATH = "/app/data/raw/sales.csv"  
+PROCESSED_DIR = "/app/data/processed"
+OUTPUT_PATH = os.path.join(PROCESSED_DIR, "ingested_data.csv")
 
 
-class DataIngestion:
-    """Handles loading and basic validation of raw sales data."""
+def ingest_data():
+    logger.info("Starting ingestion step...")
 
-    def __init__(self, filepath: str = None):
-        self.filepath = filepath or config.raw_data_path
+    if not os.path.exists(RAW_DATA_PATH):
+        raise FileNotFoundError(f"Raw data not found at {RAW_DATA_PATH}")
 
-    def load(self) -> pd.DataFrame:
-        """Load CSV and validate schema.
+    df = pd.read_csv(RAW_DATA_PATH)
+    logger.info(f"Loaded raw data with shape: {df.shape}")
 
-        Returns:
-            pd.DataFrame: Raw validated dataframe.
+    if df.empty:
+        raise ValueError("Input dataset is empty")
 
-        Raises:
-            FileNotFoundError: If the source file does not exist.
-            ValueError: If required columns are missing.
-        """
-        path = Path(self.filepath)
-        if not path.exists():
-            log.error(f"Source file not found: {self.filepath}")
-            raise FileNotFoundError(f"Data file missing: {self.filepath}")
+    os.makedirs(PROCESSED_DIR, exist_ok=True)
 
-        log.info(f"Loading data from {self.filepath}")
-        df = pd.read_csv(path, parse_dates=["date"])
+    df.to_csv(OUTPUT_PATH, index=False)
+    logger.info(f"Ingested data saved to {OUTPUT_PATH}")
 
-        self._validate_schema(df)
-        log.info(f"Loaded {len(df):,} rows, {df.shape[1]} columns")
-        return df
+    return OUTPUT_PATH
 
-    def _validate_schema(self, df: pd.DataFrame) -> None:
-        """Check all required columns are present."""
-        missing = REQUIRED_COLUMNS - set(df.columns)
-        if missing:
-            raise ValueError(f"Missing required columns: {missing}")
-        log.info("Schema validation passed")
 
-    def get_baseline_statistics(self, df: pd.DataFrame) -> dict:
-        """Compute baseline statistics for drift detection later.
+def main():
+    logger.info("Ingestion started")
 
-        These are stored during EDA and compared at inference time.
-        """
-        stats = {}
-        numeric_cols = df.select_dtypes(include="number").columns
-        for col in numeric_cols:
-            stats[col] = {
-                "mean": float(df[col].mean()),
-                "std": float(df[col].std()),
-                "min": float(df[col].min()),
-                "max": float(df[col].max()),
-                "q25": float(df[col].quantile(0.25)),
-                "q75": float(df[col].quantile(0.75)),
-            }
-        log.info(f"Computed baseline statistics for {len(stats)} columns")
-        return stats
+    try:
+        output = ingest_data()
+        logger.success(f"Ingestion completed successfully → {output}")
+
+    except Exception as e:
+        logger.exception(f"Ingestion failed: {e}")
+        raise
+
+
+if __name__ == "__main__":
+    main()

@@ -1,7 +1,6 @@
 """
-Prediction router.
-POST /api/v1/predict        — single prediction
-POST /api/v1/predict/batch  — batch predictions
+Prediction router
+FINAL VERSION
 """
 
 import time
@@ -13,7 +12,7 @@ from backend.schemas.request_schemas import (
     PredictionRequest, PredictionResponse,
     BatchPredictionRequest, BatchPredictionResponse,
 )
-from backend.services.inference_service import InferenceService, get_inference_service
+from backend.services.inference_service import get_inference_service
 from src.utils.logger import get_logger
 
 log = get_logger("predict_router")
@@ -33,10 +32,9 @@ def _build_features(req: PredictionRequest) -> dict:
     epidemic = int(req.epidemic or 0)
 
     return {
-        # ADD THESE TWO LINES
         "product_id": req.product_id,
         "store_id": req.store_id,
-        # Temporal
+
         "year": d.year,
         "month": d.month,
         "day_of_week": d.weekday(),
@@ -46,26 +44,31 @@ def _build_features(req: PredictionRequest) -> dict:
         "is_weekend": int(d.weekday() >= 5),
         "is_month_start": int(d.day == 1),
         "is_month_end": int(d.day >= 28),
+
         "price": float(req.price),
         "price_lag_7": float(req.price_lag_7 or req.price),
         "price_pct_change": 0.0,
         "price_rolling_mean_7": float(req.price),
+
         "sales_lag_1": float(req.sales_lag_1 or 0.0),
         "sales_lag_7": float(req.sales_lag_7 or 0.0),
         "sales_lag_14": 0.0,
         "sales_lag_28": 0.0,
+
         "sales_rolling_mean_7": float(req.sales_rolling_mean_7 or 0.0),
         "sales_rolling_mean_14": 0.0,
         "sales_rolling_mean_28": 0.0,
         "sales_rolling_std_7": 0.0,
         "sales_rolling_std_14": 0.0,
         "sales_rolling_std_28": 0.0,
-        "sin_1": float(np.sin(2 * np.pi * 1 * day_of_year / 365)),
-        "cos_1": float(np.cos(2 * np.pi * 1 * day_of_year / 365)),
+
+        "sin_1": float(np.sin(2 * np.pi * day_of_year / 365)),
+        "cos_1": float(np.cos(2 * np.pi * day_of_year / 365)),
         "sin_2": float(np.sin(2 * np.pi * 2 * day_of_year / 365)),
         "cos_2": float(np.cos(2 * np.pi * 2 * day_of_year / 365)),
         "sin_3": float(np.sin(2 * np.pi * 3 * day_of_year / 365)),
         "cos_3": float(np.cos(2 * np.pi * 3 * day_of_year / 365)),
+
         "discount_effect": float(req.price * discount),
         "low_stock_flag": int(inventory_level < 2),
         "price_diff": float(req.price - competitor_price),
@@ -77,46 +80,45 @@ def _build_features(req: PredictionRequest) -> dict:
 
 
 @router.post("/predict", response_model=PredictionResponse)
-def predict(
-    request: PredictionRequest,
-    service: InferenceService = Depends(get_inference_service),
-):
-    """Predict demand for a single product-store-date combination."""
+def predict(request: PredictionRequest, service=Depends(get_inference_service)):
     try:
         features = _build_features(request)
-        prediction, latency_ms = service.predict(features)
+        result = service.predict(features)
+
         return PredictionResponse(
             product_id=request.product_id,
             store_id=request.store_id,
             forecast_date=request.forecast_date,
-            predicted_demand=prediction,
+            predicted_demand=result["prediction"],
             model_version=service.model_version,
-            inference_latency_ms=latency_ms,
+            inference_latency_ms=result["latency_ms"],
         )
+
     except Exception as e:
         log.error(f"Prediction error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post("/predict/batch", response_model=BatchPredictionResponse)
-def predict_batch(
-    request: BatchPredictionRequest,
-    service: InferenceService = Depends(get_inference_service),
-):
-    """Predict demand for a batch of product-store-date combinations."""
+def predict_batch(request: BatchPredictionRequest, service=Depends(get_inference_service)):
     start = time.time()
     predictions = []
+
     for req in request.requests:
         features = _build_features(req)
-        pred, lat = service.predict(features)
-        predictions.append(PredictionResponse(
-            product_id=req.product_id,
-            store_id=req.store_id,
-            forecast_date=req.forecast_date,
-            predicted_demand=pred,
-            model_version=service.model_version,
-            inference_latency_ms=lat,
-        ))
+        result = service.predict(features)
+
+        predictions.append(
+            PredictionResponse(
+                product_id=req.product_id,
+                store_id=req.store_id,
+                forecast_date=req.forecast_date,
+                predicted_demand=result["prediction"],
+                model_version=service.model_version,
+                inference_latency_ms=result["latency_ms"],
+            )
+        )
+
     return BatchPredictionResponse(
         predictions=predictions,
         batch_size=len(predictions),

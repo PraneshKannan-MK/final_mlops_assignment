@@ -1,7 +1,7 @@
 services:
 
   mlflow:
-    image: ghcr.io/mlflow/mlflow:v2.15.1
+    image: ghcr.io/mlflow/mlflow:v3.1.1
     container_name: mlflow
     command: mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri sqlite:///mlflow/mlflow.db --default-artifact-root /mlflow/artifacts
     ports:
@@ -57,6 +57,50 @@ services:
       - grafana_data:/var/lib/grafana
     depends_on:
       - prometheus
+
+  # 🔥 AIRFLOW WEBSERVER
+  airflow-webserver:
+    image: apache/airflow:2.9.3
+    container_name: airflow-webserver
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__CORE__DAGS_FOLDER=/opt/airflow/dags
+      - PYTHONPATH=/app
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - .:/app
+    command: >
+      bash -c "
+      pip install --no-cache-dir -r /app/requirements.txt &&
+      airflow db init &&
+      airflow users create --username admin --password admin --firstname admin --lastname admin --role Admin --email admin@example.com || true &&
+      airflow webserver
+      "
+
+  # AIRFLOW SCHEDULER
+  airflow-scheduler:
+    image: apache/airflow:2.9.3
+    container_name: airflow-scheduler
+    restart: always
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__CORE__DAGS_FOLDER=/opt/airflow/dags
+      - PYTHONPATH=/app
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - .:/app
+    command: >
+      bash -c "
+      airflow db init &&
+      airflow users create --username admin --password admin --firstname admin --lastname admin --role Admin --email admin@example.com || true &&
+      airflow scheduler & 
+      airflow webserver
+      "
 
 volumes:
   mlflow_data:
